@@ -71,4 +71,17 @@ extension IntExtensions on int {
   ///
   /// Returns `true` if this integer is greater than *0*.
   bool get asBool => this > 0;
+  
+  /// Performs a switch-case statement on int using a map for cases & conditions, optional default value 
+  /// ```dart
+  /// child: typeNumber.switchCase({
+  ///   1: Text("It's one"),
+  ///   2: () { ... },
+  ///   3: Text("It's three"),
+  /// }, Text("Other number")),
+  /// ```
+  TValue switchCase<int, TValue>(Map<int, TValue> cases, [TValue defaultValue]) {
+    if (!cases.containsKey(this)) return defaultValue;
+    return cases[this];
+  }
 }

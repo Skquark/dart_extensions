@@ -18,7 +18,7 @@ extension NavigationStateExtensions on State {
   Future<T> navigateTo<T>({@required Route<T> route}) => Navigator.push(this.context, route);
 
   /// Navigate back to the last widget
-  bool navigateBack<T>({T result}) => Navigator.pop(context, result);
+  void navigateBack<T>({T result}) => Navigator.pop(context, result);
 
   /// Navigate to widget by the route name
   Future<T> navigateByRouteName<T>(String routeName, {Object args}) =>
@@ -30,7 +30,7 @@ extension NavigationStatelessExtensions on StatelessWidget {
   Future<T> navigateTo<T>({@required BuildContext context, @required Route<T> route}) => Navigator.push(context, route);
 
   /// Navigate back to the last widget
-  bool navigateBack<T>({@required BuildContext context, T result}) => Navigator.pop(context, result);
+  void navigateBack<T>({@required BuildContext context, T result}) => Navigator.pop(context, result);
 
   /// Navigate to widget by the route name
   Future<T> navigateByRouteName<T>({@required BuildContext context, String routeName, Object args}) =>

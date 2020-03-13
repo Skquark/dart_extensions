@@ -133,4 +133,17 @@ extension StringExtensions on String {
     }
     return s == 'true' || s == 'yes' || n > 0;
   }
+  
+  /// Performs a switch-case statement on String using a map for cases & conditions, optional default value 
+  /// ```dart
+  /// child: roomType.switchCase({
+  ///   "public": Text("It's public"),
+  ///   "private": Text("It's private"),
+  ///   "custom": () { ... },
+  /// }, Text("Default type")),
+  /// ```
+  TValue switchCase<String, TValue>(Map<String, TValue> cases, [TValue defaultValue]) {
+    if (!cases.containsKey(this)) return defaultValue;
+    return cases[this];
+  }
 }

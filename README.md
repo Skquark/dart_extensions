@@ -1,20 +1,19 @@
   
-[![](https://img.shields.io/badge/build-0.3.3-brightgreen)](https://github.com/droididan/dart_extentions)   ![](https://img.shields.io/badge/Code%20Coverage-96%25-green) ![](https://img.shields.io/badge/Bitrise-Pass-green)  
+[![](https://img.shields.io/badge/build-1.0.0-brightgreen)](https://github.com/droididan/dart_extentions)   ![](https://img.shields.io/badge/Code%20Coverage-96%25-green) ![](https://img.shields.io/badge/Bitrise-Pass-green)  
   
  
 ## What New 
+* `BuildContext` extensions 💪🏻
+* `List<Widget>` extensions 💪🏻
+* `Text` extensions 💪🏻
+* `Icon` extensions 💪🏻
+* `.sortBy` [0.3.5] Sorts elements in the array in-place according to natural sort order of the value returned by specified selector function.
 * `.withTooltip` Tooltips improve the accessibility of visual widgets by proving a textual representation of the widget
-* `.asBool` for String and int
-* `.inRangeOf - int`
-* `.any - Iterables`
-* `.groupBy - Iterables`
-* `.intersect - Iterables`
-* `.toMutableSet - Iterables`
 
 Why Method Extensions? When you’re using someone else’s API or when you implement a library that’s widely used, it’s often impractical or impossible to change the API. But you might still want to add some functionality.  
   
   *let me know if you want something specific or you found a bug at bar.idan@gmail.com*  
-## Let get started 💪🏻  
+## Let get started 💪🏻 
   
 1. Go to `pubspec.yaml` 
 2. add a dart_extensions and replace `[version]` with the latest version:  
@@ -27,7 +26,210 @@ dependencies:
 3. click the packages get button or *flutter pub get*  
 
 
+## Iterable Extensions
+
+### .any()
+Returns `true` if at least one element matches the given predicate.
+```dart
+final users = [User(22, "Kasey"), User(23, "Jadn")]; 
+users.any((u) => u.name == 'Kasey') // true
+```
+
+### .groupBy()
+Groups the elements in values by the value returned by key.
+```dart
+final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
+
+users.groupBy((u) => u.age); 
+```
+Sort the users by age:
+```dart
+{  
+  22: [User:22, Kasey, User:22, Rene], 
+  23: [User:23, Jadn], 
+  32: [User:32, Aden]
+}
+```
+
+### .sortBy()
+Sorts elements in the array in-place according to natural sort order of the value returned by specified selector function.
+```dart
+final users = [User(22, "Kasey"), User(16, "Roni"), User(23, "Jadn")]; 
+users.sortBy((u) => u.age) ///  [User(16, "Roni"), [User(22, "Kasey"), User(23, "Jadn")]
+```
+
+### .find()
+Returns the first element matching the given predicate, or `null` if element wasn't found.
+```dart
+final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
+
+users.find((u) => u.name == "Rene") // User(22, "Rene")
+```
+
+### .chunks()
+Splits the Iterable into chunks of the specified `size`
+```dart
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].chunks(3)) 
+```
+*result*
+```dart
+([1, 2, 3], [4, 5, 6], [7, 8, 9], [10])
+```
+
+### .filter() 
+ Returns a list containing only elements matching the given predicate, the return type will be `List`,
+ unlike the `where` operator that return `Iterator`,  also it filters null.
+```dart
+final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
+final filtered = users.filter((u) => u.name == "Kasey"); // [User(22, "Kasey")] <- Type List<User>
+
+final listWithNull = [null, User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")];
+final filtered = listWithNull.filter((u) => u.name == "Jadn"); // [User(23, "Jadn")]
+```
+
+### .intersect()
+Returns a set containing all elements that are contained by both this set and the specified collection.
+```dart
+Set.from([1, 2, 3, 4]).intersect(Set.from([3, 4, 5, 6]) // 1,2,3,4,5,6
+```
+
+### .filterNot() 
+ Returns a list containing only not the elements matching the given predicate, the return type will be `List`,
+ unlike the `where` operator that return `Iterator`,  also it filters null.
+```dart
+final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
+final filtered = users.filterNot((u) => u.name == "Kasey"); // [User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")] <- Type List<User>
+
+final listWithNull = [null, User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")];
+final filtered = listWithNull.filterNot((u) => u.name == "Jadn"); // [User(22, "Rene"), User(32, "Aden")]
+```
+
+### .takeOnly() 
+Returns a list containing first [n] elements.
+```dart
+[1, 2, 3, 4].takeOnly(1) // [1]
+```
+
+### .drop() 
+Returns a list containing all elements except first [n] elements.
+```dart
+[1, 2, 3, 4].drop(1) // [2, 3, 4]
+```
+
+### .forEachIndexed()
+Performs the given action on each element on iterable, providing sequential `index` with the `element`.
+```dart
+["red","green","blue"].forEachIndexed((item, index) { 
+	print("$item, $index"); 
+}); // 0: red // 1: green // 2: blue```  
+```
+
+### .sortedDescending()  
+Returns a new list with all elements sorted according to descending natural sort order.
+```dart  
+var list = [1,2,3,4,5];  
+final descendingList = list.sortedDescending();  
+print(descendingList); // [5, 4, 3, 2, 1]
+```  
+  
+### .count()  
+Return a number of the existing elements by a specific predicate
+```dart  
+final users = [User(33, "Miki"), User(45, "Anna"), User(19, "Amit")];  
+  
+final aboveAgeTwenty = users.count((user) => user.age > 20);  
+print(aboveAgeTwenty); // 2
+```
+
+### .associate()  
+Creates a Map instance in which the keys and values are computed from the iterable.
+```dart  
+final users = [User(33, "Miki"), User(45, "Anna"), User(19, "Amit")];  
+
+users.associate((k) => k.name, (e) => e.age) // 'Miki': 33, 'Anna': 45, 'Amit': 19}
+```
+
+### .concatWithMultipleList()  
+Return a list concatenates the output of the current list and multiple iterables.
+```dart  
+  final listOfLists = [
+        [5, 6, 7],
+        [8, 9, 10]
+      ];
+  [1, 2, 3, 4].concatWithMultipleList(listOfLists); 
+  
+  // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+  
+### .distinctBy()  
+Returns a list containing only the elements from given collection having distinct keys.
+```dart  
+// example 1
+final users = ["Zack", "Ian", "Ronit"];  
+users.distinctBy((u) => u.toLowerCase().startsWith("z")); // Zack 
+
+// example 2
+final users = [User(11, 'idan'), User(12, 'ronit'), User(11, 'asaf')];
+	
+final dist = users.distinctBy((u) => u.age);    
+dist.forEach((u) => print(u.age)); //  11, 12
+```  
+  
+### .zip()  
+Zip is used to combine multiple iterables into a single list that contains  the combination of them two.
+```dart  
+
+final soldThisMonth = [Motorcycle(2020, 'BMW R1200GS'), Motorcycle(1967, 'Honda GoldWing')];
+final soldLastMonth = [Motorcycle(2014, 'Honda Transalp'), Motorcycle(2019, 'Ducati Multistrada')];    
+  
+final sales = soldThisMonth.zip(soldLastMonth).toList();  
+  				
+print(sales); // [
+  [brand: BMW R1200GS year: 2020, brand: Honda Transalp year: 2014], // first pair from this month and last
+  [brand: Honda GoldWing year: 1967, brand: Ducati Multistrada year: 2019] // second pair from last month 
+]
+```  
+See [iterable.dart](https://github.com/droididan/dart_extentions/blob/master/lib/iterable.dart) for more  examples.  
+
 ## Flutter Extensions
+
+### Context extensions
+Are you not tired from typing `MediaQuery.of(context).size...` to get height or width? here's a cool extension
+```dart
+  context.mq  // returns the MediaQuery
+```
+
+```dart
+  context isLandscape // returns if Orientation is landscape
+```
+
+```dart
+context.sizePx // returns same as MediaQuery.of(context).size
+```
+
+```dart
+context.widthPx // returns same as MediaQuery.of(context).size.width
+```
+
+```dart
+context.heightPx // returns same as MediaQuery.of(context).height
+```
+
+### Text Extensions
+```dart
+final text = Text('hello')
+     .bold()
+     .fontSize(25)
+     .italic();
+```
+
+### List<Widget> Extensions
+```dart
+    final someWidgetList = [
+      Text('hello'),
+      Text('world'),
+    ].toColumnWidget();  // toRowWidget(), toStackWidget()
+```
 
 ### Widget extensions
 So now we can just add round corners, shadows, align, and added gestures to our `Widgets` without the crazy water-fall effect. awesome!
@@ -115,166 +317,6 @@ final json = await "https://jsonplaceholder.typicode.com/posts".httpPost(json);
 ```
 
 for more examples (put, delete) See [http.dart](https://github.com/droididan/dart_extentions/blob/master/lib/http.dart) 
-
-## Iterable Extensions
-
-### .any()
-Returns `true` if at least one element matches the given predicate.
-```dart
-final users = [User(22, "Kasey"), User(23, "Jadn")]; 
-users.any((u) => u.name == 'Kasey') // true
-```
-
-### .groupBy()
-Groups the elements in values by the value returned by key.
-```dart
-final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
-
-users.groupBy((u) => u.age); 
-```
-Sort the users by age:
-```dart
-{  
-  22: [User:22, Kasey, User:22, Rene], 
-  23: [User:23, Jadn], 
-  32: [User:32, Aden]
-}
-```
-
-### .find()
-Returns the first element matching the given predicate, or `null` if element wasn't found.
-```dart
-final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
-
-users.find((u) => u.name == "Rene") // User(22, "Rene")
-```
-
-### .chunks()
-Splits the Iterable into chunks of the specified `size`
-```dart
-[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].chunks(3)) 
-```
-*result*
-```dart
-([1, 2, 3], [4, 5, 6], [7, 8, 9], [10])
-```
-
-### .filter() 
- Returns a list containing only elements matching the given predicate, the return type will be `List`,
- unlike the `where` operator that return `Iterator`,  also it filters null.
-```dart
-final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
-final filtered = users.filter((u) => u.name == "Kasey"); // [User(22, "Kasey")] <- Type List<User>
-
-final listWithNull = [null, User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")];
-final filtered = listWithNull.filter((u) => u.name == "Jadn"); // [User(23, "Jadn")]
-```
-
-### .intersect()
-Returns a set containing all elements that are contained by both this set and the specified collection.
-```dart
-Set.from([1, 2, 3, 4]).intersect(Set.from([3, 4, 5, 6]) // 1,2,3,4,5,6
-```
-
-### .filterNot() 
- Returns a list containing only not the elements matching the given predicate, the return type will be `List`,
- unlike the `where` operator that return `Iterator`,  also it filters null.
-```dart
-final users = [User(22, "Kasey"), User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")]; 
-final filtered = users.filterNot((u) => u.name == "Kasey"); // [User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")] <- Type List<User>
-
-final listWithNull = [null, User(23, "Jadn"), User(22, "Rene"), User(32, "Aden")];
-final filtered = listWithNull.filterNot((u) => u.name == "Jadn"); // [User(22, "Rene"), User(32, "Aden")]
-```
-
-### .takeOnly() 
-Returns a list containing first [n] elements.
-```dart
-[1, 2, 3, 4].takeOnly(1) // [1]
-```
-
-### .drop() 
-Returns a list containing all elements except first [n] elements.
-```dart
-[1, 2, 3, 4].drop(1) // [2, 3, 4]
-```
-
-
-
-### .forEachIndexed()
-Performs the given action on each element on iterable, providing sequential `index` with the `element`.
-```dart
-["red","green","blue"].forEachIndexed((item, index) { 
-	print("$item, $index"); 
-}); // 0: red // 1: green // 2: blue```  
-```
-
-### .sortedDescending()  
-Returns a new list with all elements sorted according to descending natural sort order.
-```dart  
-var list = [1,2,3,4,5];  
-final descendingList = list.sortedDescending();  
-print(descendingList); // [5, 4, 3, 2, 1]
-```  
-  
-### .count()  
-Return a number of the existing elements by a specific predicate
-```dart  
-final users = [User(33, "Miki"), User(45, "Anna"), User(19, "Amit")];  
-  
-final aboveAgeTwenty = users.count((user) => user.age > 20);  
-print(aboveAgeTwenty); // 2
-```
-
-### .associate()  
-Creates a Map instance in which the keys and values are computed from the iterable.
-```dart  
-final users = [User(33, "Miki"), User(45, "Anna"), User(19, "Amit")];  
-
-users.associate((k) => k.name, (e) => e.age) // 'Miki': 33, 'Anna': 45, 'Amit': 19}
-```
-
-### .concatWithMultipleList()  
-Return a list concatenates the output of the current list and multiple iterables.
-```dart  
-  final listOfLists = [
-        [5, 6, 7],
-        [8, 9, 10]
-      ];
-  [1, 2, 3, 4].concatWithMultipleList(listOfLists); 
-  
-  // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-```
-  
-### .distinctBy()  
-Returns a list containing only the elements from given collection having distinct keys.
-```dart  
-// example 1
-final users = ["Zack", "Ian", "Ronit"];  
-users.distinctBy((u) => u.toLowerCase().startsWith("z")); // Zack 
-
-// example 2
-final users = [User(11, 'idan'), User(12, 'ronit'), User(11, 'asaf')];
-	
-final dist = users.distinctBy((u) => u.age);    
-dist.forEach((u) => print(u.age)); //  11, 12
-```  
-  
-### .zip()  
-Zip is used to combine multiple iterables into a single list that contains  the combination of them two.
-```dart  
-
-final soldThisMonth = [Motorcycle(2020, 'BMW R1200GS'), Motorcycle(1967, 'Honda GoldWing')];
-final soldLastMonth = [Motorcycle(2014, 'Honda Transalp'), Motorcycle(2019, 'Ducati Multistrada')];    
-  
-final sales = soldThisMonth.zip(soldLastMonth).toList();  
-  				
-print(sales); // [
-  [brand: BMW R1200GS year: 2020, brand: Honda Transalp year: 2014], // first pair from this month and last
-  [brand: Honda GoldWing year: 1967, brand: Ducati Multistrada year: 2019] // second pair from last month 
-]
-```  
-See [iterable.dart](https://github.com/droididan/dart_extentions/blob/master/lib/iterable.dart) for more  examples.  
 
 ## Range Extensions
 ### .until()
@@ -399,6 +441,10 @@ Return this number if it's between the range
 - `container`
 - `padding`
 - `navigation`
+- `Context`
+- `Text`
+- `List<Widget>`
+- `Icon`
 
 ## Http Extensions
 - `httpGet`
@@ -407,6 +453,7 @@ Return this number if it's between the range
 - `httpDelete`
 
 ## Iterables Extensions
+- `sortBy`
 - `toMutableSet`
 - `intersect`
 - `groupBy`

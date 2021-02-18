@@ -10,7 +10,7 @@ environment:
 dependencies:
   intl:
   quiver: ^2.0.0
-  http: ^0.13.0
+  http: ^0.12.0+2
   flutter:
     sdk: flutter
 
